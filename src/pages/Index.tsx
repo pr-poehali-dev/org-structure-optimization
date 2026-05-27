@@ -327,8 +327,8 @@ export default function Index() {
               <Icon name="Crown" size={24} className="text-yellow-400" fallback="User" />
             </div>
             <div>
-              <p className="text-xs text-white/40 font-medium uppercase tracking-widest">Холдинг</p>
               <p className="text-xl font-black text-white font-montserrat">{orgData.owner.name}</p>
+              <p className="text-xs text-white/40 font-medium uppercase tracking-widest">{orgData.owner.title}</p>
             </div>
           </div>
         </div>
