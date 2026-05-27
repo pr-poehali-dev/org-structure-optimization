@@ -193,7 +193,7 @@ const CompanyCard = ({ company }: { company: typeof orgData.companies[0] }) => {
         </div>
         <div>
           <h2 className="text-2xl font-black text-white font-montserrat tracking-wide">{company.name}</h2>
-          <p className={`text-xs font-medium ${c.text}`}>{company.departments.length} отдела</p>
+          <p className={`text-xs font-medium ${c.text}`}>{company.departments.length} {company.departments.length === 1 ? "отдел" : company.departments.length < 5 ? "отдела" : "отделов"}</p>
         </div>
       </div>
       <div className="p-4 grid grid-cols-1 gap-3">
