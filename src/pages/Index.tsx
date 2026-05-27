@@ -265,43 +265,50 @@ const CompanyCard = ({ company }: { company: typeof orgData.companies[0] }) => {
 };
 
 const ServiceCard = ({ service }: { service: typeof orgData.services[0] }) => {
-  const colorMap: Record<string, { bg: string; icon: string; glow: string }> = {
-    analytics: {
-      bg: "bg-gradient-to-br from-orange-400 to-orange-600",
-      icon: "text-orange-100",
-      glow: "shadow-orange-500/30",
-    },
-    marketing: {
-      bg: "bg-gradient-to-br from-orange-400 to-orange-600",
-      icon: "text-orange-100",
-      glow: "shadow-orange-500/30",
-    },
-    fulfillment: {
-      bg: "bg-gradient-to-br from-orange-400 to-orange-600",
-      icon: "text-orange-100",
-      glow: "shadow-orange-500/30",
-    },
-  };
-
-  const c = colorMap[service.color];
+  const [expanded, setExpanded] = useState(false);
 
   return (
-    <div
-      className={`rounded-2xl ${c.bg} shadow-xl ${c.glow} p-5 flex flex-col gap-3 flex-1 min-w-[200px] transition-transform duration-200 hover:scale-105`}
-    >
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
-          <Icon name={service.icon} size={22} className="text-white" fallback="Star" />
+    <div className="rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 shadow-xl shadow-orange-500/30 overflow-hidden flex-1 min-w-[200px]">
+      <button
+        className="w-full px-5 py-4 flex items-center justify-between gap-3 text-left"
+        onClick={() => setExpanded(!expanded)}
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+            <Icon name={service.icon} size={22} className="text-white" fallback="Star" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-white font-montserrat leading-tight">{service.name}</p>
+            <p className="text-xs text-white/70 font-golos">{service.description}</p>
+          </div>
         </div>
-        <div>
-          <p className="text-sm font-bold text-white font-montserrat leading-tight">{service.name}</p>
-          <p className="text-xs text-white/70 font-golos">{service.description}</p>
-        </div>
-      </div>
-      {service.employees && service.employees.length > 0 && (
-        <div className="border-t border-white/20 pt-3 flex flex-col gap-1.5">
+        {service.employees && service.employees.length > 0 && (
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-white/20 text-white border border-white/30">
+              {service.employees.length}
+            </span>
+            <Icon
+              name={expanded ? "ChevronUp" : "ChevronDown"}
+              size={14}
+              className="text-white/60"
+              fallback="ChevronDown"
+            />
+          </div>
+        )}
+      </button>
+      {expanded && service.employees && service.employees.length > 0 && (
+        <div className="px-4 pb-4 space-y-1.5 border-t border-white/20 pt-3">
           {service.employees.map((emp, i) => (
-            <p key={i} className="text-xs text-white/85 font-golos leading-snug">{emp}</p>
+            <div
+              key={i}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 border border-white/10"
+              style={{ animationDelay: `${i * 50}ms` }}
+            >
+              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
+                <Icon name="User" size={12} className="text-white" fallback="User" />
+              </div>
+              <span className="text-xs text-white/90 font-golos">{emp}</span>
+            </div>
           ))}
         </div>
       )}
