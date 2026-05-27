@@ -241,19 +241,19 @@ const CompanyCard = ({ company }: { company: typeof orgData.companies[0] }) => {
 const ServiceCard = ({ service }: { service: typeof orgData.services[0] }) => {
   const colorMap: Record<string, { bg: string; icon: string; glow: string }> = {
     analytics: {
-      bg: "bg-gradient-to-br from-amber-500 to-orange-600",
-      icon: "text-amber-100",
-      glow: "shadow-amber-500/30",
+      bg: "bg-gradient-to-br from-orange-400 to-orange-600",
+      icon: "text-orange-100",
+      glow: "shadow-orange-500/30",
     },
     marketing: {
-      bg: "bg-gradient-to-br from-purple-500 to-violet-700",
-      icon: "text-purple-100",
-      glow: "shadow-purple-500/30",
+      bg: "bg-gradient-to-br from-orange-400 to-orange-600",
+      icon: "text-orange-100",
+      glow: "shadow-orange-500/30",
     },
     fulfillment: {
-      bg: "bg-gradient-to-br from-rose-500 to-pink-700",
-      icon: "text-rose-100",
-      glow: "shadow-rose-500/30",
+      bg: "bg-gradient-to-br from-orange-400 to-orange-600",
+      icon: "text-orange-100",
+      glow: "shadow-orange-500/30",
     },
   };
 
