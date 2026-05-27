@@ -136,6 +136,9 @@ const orgData = {
       icon: "BarChart3",
       description: "Бизнес-аналитика и данные",
       color: "analytics",
+      employees: [
+        "Нина Малина — Аналитик",
+      ],
     },
     {
       id: "marketing",
@@ -143,6 +146,25 @@ const orgData = {
       icon: "Megaphone",
       description: "Продвижение и реклама",
       color: "marketing",
+      employees: [
+        "Вакансия — Маркетинг директор",
+        "Банова Алиса — Операционный директор по маркетингу",
+        "Ольга Кундельская — Ассистент",
+        "Яна Зазвезен — Менеджер проекта «Карманные блогеры»",
+        "Мария Костерина — Проджект менеджер проекта «Контент»",
+        "Вакансия — Руководитель направления",
+        "Альбина Гирсова — Менеджер по работе со специалистами",
+        "Мария Дкусар — Менеджер по работе с партнерами",
+        "Евгения Яровицкая — Менеджер по офлайн",
+        "Анна Дедюро — Координатор по контенту Biomins/Lipomins",
+        "Алина Гру / Настя Бычкова — Координатор по контенту Supermins",
+        "Тамара Кандаурова — Специалист по работе с блогерами",
+        "Дарья Повчиник — Контент мейкер, направление специалисты",
+        "Диля Минибаева — Контент мейкер Foody",
+        "Яровицкая Евгения — Менеджер по офлайн мероприятиям",
+        "Коваленко Роман — Диджитал маркетолог",
+        "Вакансия — Инфлюенс менеджер, SMM менеджер iTAB, CRM маркетолог",
+      ],
     },
     {
       id: "fulfillment",
@@ -150,6 +172,10 @@ const orgData = {
       icon: "Warehouse",
       description: "Хранение и отгрузка",
       color: "fulfillment",
+      employees: [
+        "Артем Бандуков — Руководитель склада",
+        "Дмитрий Ермолаев — Старший менеджер",
+      ],
     },
   ],
 };
@@ -261,15 +287,24 @@ const ServiceCard = ({ service }: { service: typeof orgData.services[0] }) => {
 
   return (
     <div
-      className={`rounded-2xl ${c.bg} shadow-xl ${c.glow} p-5 flex flex-col items-center text-center gap-3 flex-1 min-w-[160px] transition-transform duration-200 hover:scale-105`}
+      className={`rounded-2xl ${c.bg} shadow-xl ${c.glow} p-5 flex flex-col gap-3 flex-1 min-w-[200px] transition-transform duration-200 hover:scale-105`}
     >
-      <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
-        <Icon name={service.icon} size={26} className="text-white" fallback="Star" />
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+          <Icon name={service.icon} size={22} className="text-white" fallback="Star" />
+        </div>
+        <div>
+          <p className="text-sm font-bold text-white font-montserrat leading-tight">{service.name}</p>
+          <p className="text-xs text-white/70 font-golos">{service.description}</p>
+        </div>
       </div>
-      <div>
-        <p className="text-sm font-bold text-white font-montserrat leading-tight">{service.name}</p>
-        <p className="text-xs text-white/70 font-golos mt-1">{service.description}</p>
-      </div>
+      {service.employees && service.employees.length > 0 && (
+        <div className="border-t border-white/20 pt-3 flex flex-col gap-1.5">
+          {service.employees.map((emp, i) => (
+            <p key={i} className="text-xs text-white/85 font-golos leading-snug">{emp}</p>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
