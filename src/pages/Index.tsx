@@ -98,18 +98,18 @@ const CompanyCard = ({ company }: { company: typeof orgData.companies[0] }) => {
 
   const colorMap: Record<string, { bg: string; border: string; badge: string; text: string; empBg: string }> = {
     itab: {
-      bg: "bg-gradient-to-br from-blue-600 to-blue-800",
-      border: "border-blue-400/40",
-      badge: "bg-blue-500/20 text-blue-200 border border-blue-400/30",
-      text: "text-blue-100",
-      empBg: "bg-blue-500/10 hover:bg-blue-500/20 border-blue-400/20",
-    },
-    inmed: {
       bg: "bg-gradient-to-br from-emerald-600 to-teal-800",
       border: "border-emerald-400/40",
       badge: "bg-emerald-500/20 text-emerald-200 border border-emerald-400/30",
       text: "text-emerald-100",
       empBg: "bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-400/20",
+    },
+    inmed: {
+      bg: "bg-gradient-to-br from-blue-600 to-blue-800",
+      border: "border-blue-400/40",
+      badge: "bg-blue-500/20 text-blue-200 border border-blue-400/30",
+      text: "text-blue-100",
+      empBg: "bg-blue-500/10 hover:bg-blue-500/20 border-blue-400/20",
     },
   };
 
