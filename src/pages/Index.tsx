@@ -335,6 +335,47 @@ const HorizontalConnector = ({ count }: { count: number }) => (
 );
 
 export default function Index() {
+  const [unlocked, setUnlocked] = useState(false);
+  const [input, setInput] = useState("");
+  const [error, setError] = useState(false);
+
+  if (!unlocked) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center font-golos"
+        style={{ background: "linear-gradient(135deg, #0f0c29 0%, #141432 40%, #1a1a4e 70%, #0d1117 100%)" }}
+      >
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-8 w-full max-w-sm text-center">
+          <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-4">
+            <Icon name="Lock" size={26} className="text-white/60" fallback="Lock" />
+          </div>
+          <h2 className="text-xl font-black text-white font-montserrat mb-1">Доступ закрыт</h2>
+          <p className="text-white/40 text-sm mb-6">Введите пароль для просмотра структуры</p>
+          <input
+            type="password"
+            value={input}
+            onChange={(e) => { setInput(e.target.value); setError(false); }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (input === "1310") setUnlocked(true);
+                else setError(true);
+              }
+            }}
+            placeholder="Пароль"
+            className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/30 text-sm outline-none focus:border-white/40 mb-3"
+          />
+          {error && <p className="text-red-400 text-xs mb-3">Неверный пароль</p>}
+          <button
+            onClick={() => { if (input === "1310") setUnlocked(true); else setError(true); }}
+            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl py-3 text-sm font-semibold transition-colors"
+          >
+            Войти
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="min-h-screen font-golos overflow-x-hidden"
