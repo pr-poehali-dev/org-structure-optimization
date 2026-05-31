@@ -303,7 +303,7 @@ export default function Hierarchy() {
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-black text-white font-montserrat tracking-tight">Система подчинения</h1>
           <p className="text-white/40 text-sm mt-2">Верхний в блоке — руководитель, ниже — подчинённые</p>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+          <div className="no-print mt-4 flex flex-wrap items-center justify-center gap-2">
             <Link to="/mindmap" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/70 hover:text-white text-xs font-medium transition-all">
               <Icon name="Share2" size={13} fallback="ArrowLeft" />
               Майнд-карта
@@ -312,10 +312,17 @@ export default function Hierarchy() {
               <Icon name="LayoutGrid" size={13} fallback="ArrowLeft" />
               Классический вид
             </Link>
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-600/40 hover:bg-indigo-600/60 border border-indigo-400/40 text-indigo-50 text-xs font-medium transition-all"
+            >
+              <Icon name="FileDown" size={13} fallback="Download" />
+              Скачать PDF
+            </button>
           </div>
         </div>
 
-        <div className="flex justify-center gap-2 mb-10">
+        <div className="no-print flex justify-center gap-2 mb-10">
           {tabs.map((t) => (
             <button
               key={t.id}
