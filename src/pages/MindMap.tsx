@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
-import { orgData } from "@/data/orgData";
+import { orgData, downloadStructure } from "@/data/orgData";
 
 const branchColors: Record<string, { node: string; ring: string; line: string; chip: string }> = {
   itab: {
@@ -130,13 +130,22 @@ export default function MindMap() {
             Майнд-карта холдинга
           </h1>
           <p className="text-white/40 text-sm mt-2">Нажмите на ветку, чтобы раскрыть отделы</p>
-          <Link
-            to="/"
-            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/70 hover:text-white text-xs font-medium transition-all"
-          >
-            <Icon name="LayoutGrid" size={13} fallback="ArrowLeft" />
-            Классический вид
-          </Link>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/70 hover:text-white text-xs font-medium transition-all"
+            >
+              <Icon name="LayoutGrid" size={13} fallback="ArrowLeft" />
+              Классический вид
+            </Link>
+            <button
+              onClick={downloadStructure}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/70 hover:text-white text-xs font-medium transition-all"
+            >
+              <Icon name="Download" size={13} fallback="Download" />
+              Скачать структуру
+            </button>
+          </div>
         </div>
 
         {/* Map */}
