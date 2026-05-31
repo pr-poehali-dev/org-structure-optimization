@@ -18,6 +18,7 @@ interface Unit {
   name: string;
   color: string;
   icon: string;
+  kind: "company" | "service";
   departments: { name: string; icon: string; employees: string[] }[];
 }
 
@@ -27,6 +28,7 @@ const buildUnits = (): Unit[] => {
     name: c.name,
     color: c.color,
     icon: c.icon,
+    kind: "company",
     departments: c.departments.map((d) => ({ name: d.name, icon: d.icon, employees: d.employees.filter(Boolean) })),
   }));
   const services: Unit[] = orgData.services.map((s) => ({
@@ -34,6 +36,7 @@ const buildUnits = (): Unit[] => {
     name: s.name,
     color: s.color,
     icon: s.icon,
+    kind: "service",
     departments: [{ name: s.description, icon: "Users", employees: (s.employees || []).filter(Boolean) }],
   }));
   return [...companies, ...services];
@@ -45,6 +48,24 @@ const splitName = (emp: string) => {
 };
 
 const units = buildUnits();
+const companyUnits = units.filter((u) => u.kind === "company");
+const serviceUnits = units.filter((u) => u.kind === "service");
+
+const SectionHeader = ({ kind, count }: { kind: "company" | "service"; count: number }) => {
+  const isCo = kind === "company";
+  return (
+    <div className="flex items-center gap-3 my-2">
+      <div className={`h-px flex-1 bg-gradient-to-r from-transparent ${isCo ? "to-cyan-400/40" : "to-orange-400/40"}`} />
+      <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${isCo ? "bg-cyan-500/10 border-cyan-400/30" : "bg-orange-500/10 border-orange-400/30"}`}>
+        <Icon name={isCo ? "Building2" : "Wrench"} size={14} className={isCo ? "text-cyan-300" : "text-orange-300"} fallback="Star" />
+        <span className={`text-xs font-bold uppercase tracking-widest ${isCo ? "text-cyan-200" : "text-orange-200"}`}>
+          {isCo ? "Организации" : "Сервисные центры"} · {count}
+        </span>
+      </div>
+      <div className={`h-px flex-1 bg-gradient-to-l from-transparent ${isCo ? "to-cyan-400/40" : "to-orange-400/40"}`} />
+    </div>
+  );
+};
 
 /* ---------- 1. ДЕРЕВО ---------- */
 const PersonCard = ({ emp, color, boss }: { emp: string; color: string; boss?: boolean }) => {
@@ -83,21 +104,46 @@ const TreeDept = ({ dept, color }: { dept: Unit["departments"][0]; color: string
   );
 };
 
-const TreeView = () => (
-  <div className="space-y-10">
-    {units.map((u) => {
-      const c = colors[u.color] || colors.itab;
-      return (
-        <div key={u.id} className="overflow-x-auto">
-          <div className="flex flex-col items-center min-w-max mx-auto px-4">
-            <div className={`bg-gradient-to-br ${c.from} rounded-2xl px-6 py-3 shadow-xl ring-1 ${c.ring} flex items-center gap-3`}>
-              <Icon name={u.icon} size={22} className="text-white" fallback="Building2" />
-              <span className="text-white font-black font-montserrat text-lg">{u.name}</span>
+const TreeUnit = ({ u }: { u: Unit }) => {
+  const c = colors[u.color] || colors.itab;
+  const [head, ...rest] = u.departments;
+  const headBoss = head?.employees[0];
+  const isService = u.kind === "service";
+  return (
+    <div className={`overflow-x-auto ${isService ? `rounded-2xl border ${c.soft} py-6` : ""}`}>
+      <div className="flex flex-col items-center min-w-max mx-auto px-4">
+        {/* Компания / Сервис */}
+        <div className={`bg-gradient-to-br ${c.from} rounded-2xl px-6 py-3 shadow-xl ring-1 ${c.ring} flex items-center gap-3`}>
+          <Icon name={u.icon} size={22} className="text-white" fallback="Building2" />
+          <span className="text-white font-black font-montserrat text-lg">{u.name}</span>
+        </div>
+
+        {/* Глава (ген.дир / руководство) — выше всех */}
+        {headBoss && (
+          <>
+            <div className={`w-0.5 h-6 ${c.line}`} />
+            <div className={`mb-2 px-3 py-1 rounded-full border ${c.soft} flex items-center gap-1.5`}>
+              <Icon name={head.icon} size={12} className={c.text} fallback="Crown" />
+              <span className={`text-[11px] font-semibold ${c.text}`}>{head.name}</span>
             </div>
+            <PersonCard emp={headBoss} color={u.color} boss />
+            {head.employees.slice(1).length > 0 && (
+              <div className="flex gap-3 flex-wrap justify-center mt-2">
+                {head.employees.slice(1).map((e, i) => (
+                  <PersonCard key={i} emp={e} color={u.color} />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Остальные отделы — уровнем ниже главы */}
+        {rest.length > 0 && (
+          <>
             <div className={`w-0.5 h-6 ${c.line}`} />
             <div className="flex items-start gap-8 flex-wrap justify-center pt-6 relative">
               <div className={`absolute top-0 left-[8%] right-[8%] h-0.5 ${c.line}`} />
-              {u.departments.map((d, i) => (
+              {rest.map((d, i) => (
                 <div key={i} className="flex flex-col items-center">
                   <div className={`w-0.5 h-6 -mt-6 ${c.line}`} />
                   <div className={`mb-3 px-3 py-1 rounded-full border ${c.soft} flex items-center gap-1.5`}>
@@ -108,20 +154,33 @@ const TreeView = () => (
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      );
-    })}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const TreeView = () => (
+  <div className="space-y-10">
+    <SectionHeader kind="company" count={companyUnits.length} />
+    {companyUnits.map((u) => (
+      <TreeUnit key={u.id} u={u} />
+    ))}
+    <SectionHeader kind="service" count={serviceUnits.length} />
+    <div className="grid gap-6 md:grid-cols-3">
+      {serviceUnits.map((u) => (
+        <TreeUnit key={u.id} u={u} />
+      ))}
+    </div>
   </div>
 );
 
 /* ---------- 2. КАРТА СО СВЯЗЯМИ ---------- */
-const MapView = () => (
-  <div className="grid md:grid-cols-2 gap-6">
-    {units.map((u) => {
-      const c = colors[u.color] || colors.itab;
-      return (
-        <div key={u.id} className={`rounded-2xl border ${c.soft} p-5`}>
+const MapUnit = ({ u }: { u: Unit }) => {
+  const c = colors[u.color] || colors.itab;
+  return (
+    <div className={`rounded-2xl border ${c.soft} p-5`}>
           <div className="flex items-center gap-3 mb-4">
             <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${c.from} flex items-center justify-center`}>
               <Icon name={u.icon} size={20} className="text-white" fallback="Building2" />
@@ -158,46 +217,72 @@ const MapView = () => (
               );
             })}
           </div>
-        </div>
-      );
-    })}
+    </div>
+  );
+};
+
+const MapView = () => (
+  <div className="space-y-4">
+    <SectionHeader kind="company" count={companyUnits.length} />
+    <div className="grid md:grid-cols-2 gap-6">
+      {companyUnits.map((u) => (
+        <MapUnit key={u.id} u={u} />
+      ))}
+    </div>
+    <div className="pt-4">
+      <SectionHeader kind="service" count={serviceUnits.length} />
+    </div>
+    <div className="grid md:grid-cols-3 gap-6">
+      {serviceUnits.map((u) => (
+        <MapUnit key={u.id} u={u} />
+      ))}
+    </div>
   </div>
 );
 
 /* ---------- 3. СПИСОК С ОТСТУПАМИ ---------- */
+const ListUnit = ({ u }: { u: Unit }) => {
+  const c = colors[u.color] || colors.itab;
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-3">
+        <Icon name={u.icon} size={18} className={c.text} fallback="Building2" />
+        <span className="text-white font-black font-montserrat text-lg">{u.name}</span>
+      </div>
+      <div className={`border-l-2 ${c.line} pl-4 space-y-4`}>
+        {u.departments.map((d, i) => {
+          const [boss, ...subs] = d.employees;
+          if (!boss) return null;
+          return (
+            <div key={i}>
+              <div className="flex items-center gap-1.5 mb-1">
+                <Icon name={d.icon} size={12} className={c.text} fallback="Dot" />
+                <span className={`text-[11px] font-semibold uppercase tracking-wide ${c.text}`}>{d.name}</span>
+              </div>
+              <p className="text-white text-sm font-bold">{boss}</p>
+              <ul className="mt-1 ml-4 space-y-1 border-l border-white/15 pl-3">
+                {subs.map((s, j) => (
+                  <li key={j} className="text-white/60 text-xs leading-snug relative before:content-['–'] before:absolute before:-left-3 before:text-white/30">{s}</li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 const ListView = () => (
   <div className="max-w-2xl mx-auto space-y-8">
-    {units.map((u) => {
-      const c = colors[u.color] || colors.itab;
-      return (
-        <div key={u.id}>
-          <div className="flex items-center gap-2 mb-3">
-            <Icon name={u.icon} size={18} className={c.text} fallback="Building2" />
-            <span className="text-white font-black font-montserrat text-lg">{u.name}</span>
-          </div>
-          <div className={`border-l-2 ${c.line} pl-4 space-y-4`}>
-            {u.departments.map((d, i) => {
-              const [boss, ...subs] = d.employees;
-              if (!boss) return null;
-              return (
-                <div key={i}>
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <Icon name={d.icon} size={12} className={c.text} fallback="Dot" />
-                    <span className={`text-[11px] font-semibold uppercase tracking-wide ${c.text}`}>{d.name}</span>
-                  </div>
-                  <p className="text-white text-sm font-bold">{boss}</p>
-                  <ul className="mt-1 ml-4 space-y-1 border-l border-white/15 pl-3">
-                    {subs.map((s, j) => (
-                      <li key={j} className="text-white/60 text-xs leading-snug relative before:content-['–'] before:absolute before:-left-3 before:text-white/30">{s}</li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    })}
+    <SectionHeader kind="company" count={companyUnits.length} />
+    {companyUnits.map((u) => (
+      <ListUnit key={u.id} u={u} />
+    ))}
+    <SectionHeader kind="service" count={serviceUnits.length} />
+    {serviceUnits.map((u) => (
+      <ListUnit key={u.id} u={u} />
+    ))}
   </div>
 );
 

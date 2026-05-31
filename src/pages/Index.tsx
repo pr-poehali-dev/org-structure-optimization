@@ -239,6 +239,13 @@ export default function Index() {
               <Icon name="Network" size={13} fallback="Share2" />
               Майнд-карта
             </Link>
+            <Link
+              to="/hierarchy"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-400/30 text-indigo-100 text-xs font-medium transition-all duration-200"
+            >
+              <Icon name="GitBranch" size={13} fallback="Share2" />
+              Система подчинения
+            </Link>
           </div>
         </div>
 
