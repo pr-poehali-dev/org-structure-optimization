@@ -292,6 +292,27 @@ const tabs: { id: View; label: string; icon: string }[] = [
   { id: "list", label: "Список", icon: "List" },
 ];
 
+const descriptions: Record<View, { title: string; text: string; tag: string; icon: string }> = {
+  tree: {
+    title: "Дерево — организационная диаграмма",
+    tag: "Для официальных презентаций",
+    icon: "GitBranch",
+    text: "Классическая оргсхема сверху вниз: компания → руководство → отделы и сотрудники. Показывает вертикаль власти — сразу видно, кто главный и кто кому подчиняется по цепочке. Самый привычный и «серьёзный» формат для инвесторов и найма топ-менеджеров.",
+  },
+  map: {
+    title: "Карта связей — компактные блоки",
+    tag: "Для рабочих совещаний",
+    icon: "Network",
+    text: "Каждое подразделение — отдельная карточка: руководитель выделен цветом, подчинённые под ним соединены линиями. Вся структура помещается на один экран, удобно сравнивать отделы между собой и обсуждать зоны ответственности.",
+  },
+  list: {
+    title: "Список — текстовая иерархия",
+    tag: "Для печати и быстрой сверки",
+    icon: "List",
+    text: "Простой вложенный список с отступами: руководитель крупно, подчинённые ниже. Самый читаемый формат — легко найти конкретного человека, скопировать в документ или распечатать.",
+  },
+};
+
 export default function Hierarchy() {
   const [view, setView] = useState<View>("tree");
   return (
@@ -333,6 +354,17 @@ export default function Hierarchy() {
               {t.label}
             </button>
           ))}
+        </div>
+
+        <div className="mb-10 max-w-3xl mx-auto rounded-2xl bg-white/5 border border-white/10 p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Icon name={descriptions[view].icon} size={18} className="text-indigo-300" fallback="Info" />
+            <h2 className="text-white font-bold font-montserrat">{descriptions[view].title}</h2>
+            <span className="ml-auto text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200">
+              {descriptions[view].tag}
+            </span>
+          </div>
+          <p className="text-white/60 text-sm leading-relaxed">{descriptions[view].text}</p>
         </div>
 
         {view === "tree" && <TreeView />}
