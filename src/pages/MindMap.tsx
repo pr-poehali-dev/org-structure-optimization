@@ -110,8 +110,7 @@ export default function MindMap() {
     children: [{ name: "Сотрудники", icon: "Users", people: s.employees }],
   }));
 
-  const leftNodes = [companyNodes[0], serviceNodes[0], serviceNodes[1]].filter(Boolean);
-  const rightNodes = [companyNodes[1], serviceNodes[2]].filter(Boolean);
+
 
   return (
     <div
@@ -149,10 +148,14 @@ export default function MindMap() {
         </div>
 
         {/* Map */}
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-2">
-          {/* Left branches */}
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-2">
+          {/* Left: Organizations */}
           <div className="flex-1 flex flex-col gap-6 w-full lg:items-end">
-            {leftNodes.map((n) => (
+            <div className="flex items-center gap-2 lg:flex-row-reverse px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30">
+              <Icon name="Building2" size={13} className="text-cyan-300" fallback="Building2" />
+              <span className="text-xs font-bold uppercase tracking-widest text-cyan-200">Организации · {companyNodes.length}</span>
+            </div>
+            {companyNodes.map((n) => (
               <Branch key={n.id} node={n} side="left" />
             ))}
           </div>
@@ -167,11 +170,27 @@ export default function MindMap() {
             </div>
           </div>
 
-          {/* Right branches */}
+          {/* Right: Service centers */}
           <div className="flex-1 flex flex-col gap-6 w-full lg:items-start">
-            {rightNodes.map((n) => (
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-400/30">
+              <Icon name="Wrench" size={13} className="text-orange-300" fallback="Star" />
+              <span className="text-xs font-bold uppercase tracking-widest text-orange-200">Сервисные центры · {serviceNodes.length}</span>
+            </div>
+            {serviceNodes.map((n) => (
               <Branch key={n.id} node={n} side="right" />
             ))}
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div className="mt-12 flex flex-wrap justify-center gap-6 text-xs text-white/50">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-gradient-to-br from-cyan-400 to-blue-600" />
+            Организации
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-gradient-to-br from-amber-400 to-rose-500" />
+            Сервисные центры (общие для обеих компаний)
           </div>
         </div>
       </div>
