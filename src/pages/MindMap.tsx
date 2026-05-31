@@ -137,6 +137,13 @@ export default function MindMap() {
               <Icon name="LayoutGrid" size={13} fallback="ArrowLeft" />
               Классический вид
             </Link>
+            <Link
+              to="/hierarchy"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/70 hover:text-white text-xs font-medium transition-all"
+            >
+              <Icon name="GitBranch" size={13} fallback="Share2" />
+              Система подчинения
+            </Link>
             <button
               onClick={downloadStructure}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/70 hover:text-white text-xs font-medium transition-all"
