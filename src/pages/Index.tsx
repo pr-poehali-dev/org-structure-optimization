@@ -1,184 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
-
-const orgData = {
-  owner: {
-    name: "Холдинг",
-    title: "Учредители",
-  },
-  ceo: {
-    name: "Управляющий директор",
-    title: "Холдинг",
-  },
-  companies: [
-    {
-      id: "itab",
-      name: "ITAB",
-      color: "itab",
-      icon: "Monitor",
-      departments: [
-        {
-          name: "Генеральный директор",
-          icon: "Crown",
-          employees: ["Джессика Савельева — Генеральный директор / управляющий партнёр", "Платонова Елизавета — Бизнес-ассистент", "Мария Павлова — HR Business Partner"],
-        },
-        {
-          name: "Финансы",
-          icon: "DollarSign",
-          employees: ["Хачатурян Лорина — Финансовый директор"],
-        },
-        {
-          name: "Операционный отдел",
-          icon: "Settings",
-          employees: [
-            "Фролова Олеся — Операционный директор",
-            "Лебедева Ирина — Операционный менеджер",
-            "Бухгалтерия — аутсорс",
-          ],
-        },
-        {
-          name: "Товарный отдел",
-          icon: "Package",
-          employees: [
-            "Светлана Макаренко — Категорийный менеджер",
-            "Александра Нагорная — Менеджер отдела по работе с поставщиками",
-            "Мария Паулкина — Менеджер ЭМК",
-            "Елизарова Юля — Менеджер по закупкам",
-          ],
-        },
-        {
-          name: "Продукт",
-          icon: "Layers",
-          employees: [
-            "Айнур Минибаев — Директор по продукту",
-            "Афанасьева Ольга — Проджект менеджер",
-            "Максим Лоськов — Разработчик",
-            "Олег Романов — Разработчик",
-          ],
-        },
-        {
-          name: "Технический отдел",
-          icon: "Code",
-          employees: [
-            "Лоськов Максим — Технический директор платформы iTAB",
-            "Олег Романов — Разработчик",
-          ],
-        },
-      ],
-    },
-    {
-      id: "inmed",
-      name: "ИНМЕД",
-      color: "inmed",
-      icon: "Heart",
-      departments: [
-        {
-          name: "Руководство",
-          icon: "Crown",
-          employees: [
-            "Джессика Савельева — Управляющий партнёр",
-            "Анна Государева — Исполнительный директор",
-            "Елизавета Платонова — Бизнес-ассистент",
-            "Мария Глинская — Менеджер по производству и исследованиям",
-          ],
-        },
-        {
-          name: "Отдел digital-продаж",
-          icon: "TrendingUp",
-          employees: [
-            "Антон Преловский — РОДП",
-            "Виолетта Дерепко — Менеджер маркетплейсов",
-            "Алексей Прохорченко — Специалист маркетплейсов",
-
-
-          ],
-        },
-        {
-          name: "Отдел оптовых продаж",
-          icon: "ShoppingCart",
-          employees: [
-            "Эльдар Мамедов — РООП",
-            "Максим Корчев — Заместитель РООП",
-            "Вакансия — Менеджер по продажам",
-          ],
-        },
-        {
-          name: "Отдел брендинга",
-          icon: "Megaphone",
-          employees: [
-            "Елизавета Ященко — Бренд-лид",
-
-          ],
-        },
-        {
-          name: "Операционный отдел",
-          icon: "Settings",
-          employees: [
-            "Олеся Фролова — Операционный директор",
-            "Ирина Лебедева — Операционный специалист",
-            "Бухгалтерия — аутсорс",
-          ],
-        },
-        {
-          name: "Финансовый отдел",
-          icon: "DollarSign",
-          employees: [
-            "Лорина Хачатурян — Финансовый директор",
-          ],
-        },
-      ],
-    },
-  ],
-  services: [
-    {
-      id: "analytics",
-      name: "Аналитик",
-      icon: "BarChart3",
-      description: "Бизнес-аналитика и данные",
-      color: "analytics",
-      employees: [
-        "Нина Малина — Аналитик",
-      ],
-    },
-    {
-      id: "marketing",
-      name: "Маркетинговое агентство",
-      icon: "Megaphone",
-      description: "Продвижение и реклама",
-      color: "marketing",
-      employees: [
-        "Вакансия — Маркетинг директор",
-        "Банова Алиса — Операционный директор по маркетингу",
-        "Ольга Кундельская — Ассистент",
-        "Яна Зазвезен — Менеджер проекта «Карманные блогеры»",
-        "Мария Костерина — Проджект менеджер проекта «Контент»",
-        "Вакансия — Руководитель направления",
-        "Альбина Гирсова — Менеджер по работе со специалистами",
-        "Мария Дкусар — Менеджер по работе с партнерами",
-        "Евгения Яровицкая — Менеджер по офлайн",
-        "Анна Дедюро — Координатор по контенту Biomins/Lipomins",
-        "Алина Гру / Настя Бычкова — Координатор по контенту Supermins",
-        "Тамара Кандаурова — Специалист по работе с блогерами",
-        "Дарья Повчиник — Контент мейкер, направление специалисты",
-        "Диля Минибаева — Контент мейкер Foody",
-        "Яровицкая Евгения — Менеджер по офлайн мероприятиям",
-        "Коваленко Роман — Диджитал маркетолог",
-        "Вакансия — Инфлюенс менеджер, SMM менеджер iTAB, CRM маркетолог",
-      ],
-    },
-    {
-      id: "fulfillment",
-      name: "Фулфилмент",
-      icon: "Warehouse",
-      description: "Хранение и отгрузка",
-      color: "fulfillment",
-      employees: [
-        "Артем Бандуков — Руководитель склада",
-        "Дмитрий Ермолаев — Старший менеджер",
-      ],
-    },
-  ],
-};
+import { orgData, downloadStructure } from "@/data/orgData";
 
 const CompanyCard = ({ company }: { company: typeof orgData.companies[0] }) => {
   const [expandedDept, setExpandedDept] = useState<string | null>(null);
@@ -401,6 +224,22 @@ export default function Index() {
             Структура холдинга
           </h1>
           <p className="text-white/40 text-sm mt-2 font-golos">Нажмите на отдел, чтобы увидеть сотрудников</p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <button
+              onClick={downloadStructure}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/70 hover:text-white text-xs font-medium transition-all duration-200"
+            >
+              <Icon name="Download" size={13} fallback="Download" />
+              Скачать структуру
+            </button>
+            <Link
+              to="/mindmap"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-400/30 text-indigo-100 text-xs font-medium transition-all duration-200"
+            >
+              <Icon name="Network" size={13} fallback="Share2" />
+              Майнд-карта
+            </Link>
+          </div>
         </div>
 
         {/* Owner */}
