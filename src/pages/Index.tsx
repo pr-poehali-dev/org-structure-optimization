@@ -239,6 +239,13 @@ export default function Index() {
               <Icon name="GitBranch" size={13} fallback="Share2" />
               Система подчинения
             </Link>
+            <Link
+              to="/ops-metrics"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-400/30 text-emerald-100 text-xs font-medium transition-all duration-200"
+            >
+              <Icon name="Gauge" size={13} fallback="Activity" />
+              Метрики опердиректора
+            </Link>
           </div>
         </div>
 
